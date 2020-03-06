@@ -46,13 +46,51 @@ public class MyMiniSearchEngine {
     // key phrase can have one or two words in English alphabetic characters.
     // return an empty list if search() finds no match in all documents.
     public List<Integer> search(String keyPhrase) {
-        // homework
-        for(int i=0;i<indexes.size();i++){
-            if(indexes.get(i).contains(keyPhrase)))
-            {
-                return indexes.get(i);
+        String[] words= keyPhrase.split(" ");
+        words[0] = strip(words[0]);
+        List<List<Integer>> result = indexes.get(words[0]);     // Finds all values of key words[0]
+        for(int i = 1; i < words.length; i++) {
+            words[i] = strip(words[i]);
+            List<List<Integer>> temp = indexes.get(words[i]);   //This is the values of all the next word.
+            if(temp == null) {
+                return new ArrayList<>();
+            }
+            for (int j = 0; j < result.size(); j++) {
+                if (result.get(j).isEmpty()) {
+                    temp.get(j).clear();
+                } else {
+                    for (int n = 0; n < temp.get(j).size(); n++) {
+                        int r = 0;
+                        while (result.get(j).get(r) < temp.get(j).get(n)) {
+                            r++;
+                            if(r>=result.get(j).size())
+                                break;
+                        }
+                        if(r > 0) --r;
+                        if (result.get(j).get(r) != (temp.get(j).get(n) - 1)) {
+                            temp.get(j).remove(n);
+                            n--;
+                        }
+                    }
+                }
+            }
+            result = temp;
+
+        }
+        List<Integer> answer = new ArrayList<>();
+        if(result==null) return answer;
+        for(int i = 0; i < result.size(); i++){
+            if(!result.get(i).isEmpty()){
+                answer.add(i);
             }
         }
-        return new ArrayList<>(); // place holder
+
+        return answer;
+
+    }
+    public static String strip (String string){
+        string = string.toLowerCase();
+        string = string.replaceAll("[^a-z]", "");
+        return string;
     }
 }
