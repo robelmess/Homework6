@@ -6,6 +6,7 @@ import java.util.Map;
 public class MyMiniSearchEngine {
     // default solution. OK to change.
     // do not change the signature of index()
+    //
     private Map<String, List<List<Integer>>> indexes;
 
     // disable default constructor
